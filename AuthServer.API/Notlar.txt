@@ -1,0 +1,12 @@
+
+region DERS 7
+
+AuthServer.API => Token daðýtan api
+Core,Data,Service katmanlarýndan beslenecek
+
+Api katmaný, Service katmaný ile haberleþecek
+Yani Api Katmanýnda Dependencies kýsmýnda referans Service'yi seçeceðiz
+(Api Service'in referansýný aldý)
+
+endRegion
+

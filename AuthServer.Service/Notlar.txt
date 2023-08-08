@@ -1,0 +1,15 @@
+
+region DERS 7
+
+Service katmaný, Data katmaný ile haberleþecek
+Yani Service Katmanýnda Dependencies kýsmýnda referans Data'yý seçeceðiz
+(Service Data'ya referansýný aldý)
+
+
+Core => Data => Service => API
+
+Yani APÝ Serviceden referans aldý
+Serivce Datadan aldý
+Data Core'dan aldý
+
+endRegion

@@ -1,0 +1,10 @@
+Region DERS 8 
+
+Data ve Service katmanýný implemente eden interfaceler burda olacak
+Entityler de burda bulunacak
+Ýleride kontratlarým olursa yani Service ve datanýn implemente edeceði interfaceler burda olacak
+
+
+
+
+EndRegion
