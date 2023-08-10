@@ -9,9 +9,13 @@ namespace SharedLibrary.Dtos
 {
     public class ErrorDto
     {
+        // Benim uygulamamda herhangi bir hata meydana geldiğined bu sınıfı dolduracağım
 
         public List<string> Errors { get; private set; } // hataların listesi
         public bool IsShow { get; private set; } // hataların kullanıcıya gösterilip gösterilmeyeceği
+
+        // Gelen hatanın showunu true gönderirsem sen bu hatayı kullanıcıya gösterebilirsin. 
+        // developerın anlayacağı hatayı false set edicem. Kullanıcının ki de ture
 
         // *** private sete çektik çünkü başka biri propu set etmek isterse ctoru mutlaka kullansın
 

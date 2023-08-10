@@ -11,8 +11,9 @@ namespace AuthServer.Core.Services
 {
     public interface ITokenService
     {
-        TokenDto CreateToken(UserApp userApp);
+        TokenDto CreateToken(UserApp userApp); // normal token üretecek, kullanıcı için oluşacak
+        // kendi içinde kullanacağı için response dönmüyorum
 
-        ClientTokenDto CreateTokenByClient(Client client);
+        ClientTokenDto CreateTokenByClient(Client client); // refresh token olmayan client token dönecek
     }
 }

@@ -12,7 +12,7 @@ namespace AuthServer.Core.Repositories
     {
         Task<TEntity> GetByIdAsync(int id);
 
-        Task<IEnumerable<TEntity>> GetAllAsync();   // tüm datalar gelecek hiçbir işlem yapmayacağım diye enumerable dedim
+        Task<IEnumerable<TEntity>> GetAllAsync(); // tüm datalar gelecek hiçbir işlem yapmayacağım diye enumerable dedim
 
         IQueryable<TEntity> Where(Expression<Func<TEntity,bool>> predicate);
 

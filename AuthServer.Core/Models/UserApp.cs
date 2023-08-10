@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace AuthServer.Core.Models
 {
     public class UserApp : IdentityUser
-    { // hem IdentityUser'dan gelen alanlar olacak hem de city alanı
+    { 
+        // hem IdentityUser'dan gelen alanlar olacak hem de city alanı
         public string City { get; set; }
     }
 }
