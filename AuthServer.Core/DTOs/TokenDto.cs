@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AuthServer.Core.DTOs
 {
-    public class TokenDto
+    public class TokenDto // esas token bu abi dönülecek olan
     {
 
         public string AccessToken { get; set; } 
