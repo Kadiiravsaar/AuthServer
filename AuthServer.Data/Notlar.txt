@@ -9,3 +9,6 @@ Yani Data Katmanýnda Dependencies kýsmýnda referans Core'u seçeceðiz
 Core => Data => Service => API
 
 endRegion
+
+
+Veritabaný ile iþlemler
