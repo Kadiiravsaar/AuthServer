@@ -11,19 +11,19 @@ namespace AuthServer.Data.Repositories
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity: class
     {
         private readonly DbContext _context;
-        private readonly DbSet<TEntity> _dbSet;
+        private readonly DbSet<TEntity> _dbSet; // tablolar üzerinde işlemler yapabilmek için
 
         public GenericRepository(AppDbContext context, DbSet<TEntity> dbSet)
         {
             _context = context;
-            _dbSet = _context.Set<TEntity>();
+            _dbSet = context.Set<TEntity>();
         }
 
         public async Task Add(TEntity entity)
         {
-            await _dbSet.AddAsync(entity);
+            await _dbSet.AddAsync(entity); // memory'e bi tane entity ekledim dbye yansımadı
+            // service de savechanges çağırdığımda yansıyacak
         }
-
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
@@ -36,7 +36,8 @@ namespace AuthServer.Data.Repositories
 
             if (entity != null)
             {
-                _context.Entry(entity).State = EntityState.Detached;
+                // data var ise 
+                _context.Entry(entity).State = EntityState.Detached; // bu arkadaş memoryde takip edilmesin
             }
             
             return entity;
