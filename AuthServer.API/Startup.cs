@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using SharedLibrary.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,10 @@ namespace AuthServer.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // CustomTokenOptions ve appsettingin haberleþmesini saðlayacaðýz
+            services.Configure<CustomTokenOptions>(Configuration.GetSection("TokenOption"));
+            // generic olarak CustomTokenOptions al. bu CustomTokenOptions'ý nerden al git appseetings içinden getsetting ile tokenoption al
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
