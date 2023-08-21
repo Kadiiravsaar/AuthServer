@@ -46,10 +46,22 @@ namespace AuthServer.Service.Services
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()), // her token için bir de token ıd olsun
 
             };
-            
+
             userList.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
             return userList;
         }
+
+
+        private IEnumerable<Claim> GetClaimsByClient(Client client)
+        {
+            var claims = new List<Claim>();
+            claims.AddRange(client.Audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()); // her token için bir de token ıd olsun
+            new Claim(JwtRegisteredClaimNames.Sub, client.Id.ToString());
+
+            return claims;
+        }
+
 
         public TokenDto CreateToken(UserApp userApp) // kullanıcı ile işlem yapacağım o yüzden usermanager lazım
         {
