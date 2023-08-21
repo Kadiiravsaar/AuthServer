@@ -35,14 +35,15 @@ namespace AuthServer.Service.Services
             return Convert.ToBase64String(numberByte);
         }
 
-
+        // Claim => Bir token içerisinde token'ın payloadında kullanıcı hakkında tutmuş olduğum nesneler birer claimdir
+        // Claim => hangi apilere istek yapacağı gibi ömrü gibi alanlara da claim denir
         private IEnumerable<Claim> GetClaim(UserApp userApp, List<String> audiences)
         {
             var userList = new List<Claim> {
-                new Claim(ClaimTypes.NameIdentifier,userApp.Id),
-                new Claim(JwtRegisteredClaimNames.Email, userApp.Email),
-                new Claim(ClaimTypes.Name,userApp.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier,userApp.Id), // kullanıcı ıd'sini payload da görmek istiyorum
+                new Claim(JwtRegisteredClaimNames.Email, userApp.Email), // payload da email görmek istiyorum
+                new Claim(ClaimTypes.Name,userApp.UserName), // payload da username görmek istiyorum
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()), // her token için bir de token ıd olsun
 
             };
             
