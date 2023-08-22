@@ -106,7 +106,39 @@ namespace AuthServer.Service.Services
 
         public ClientTokenDto CreateTokenByClient(Client client)
         {
-            throw new NotImplementedException();
+            var accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration); // token ömrünü alacağız peki nerden geliyor (_tokenOptions buradan)
+
+            // clientler de refresh token olmayacak
+
+            var securityKey = SignService.GetSymmetricSecurityKey(_tokenOptions.SecurityKey); //  tokenı imzalayacak keyi alıyoruz
+
+            SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+            // imza oluşturuyoruz. token isterken burdan istiyor
+
+            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken // token oluşturma
+                (
+                    issuer: _tokenOptions.Issuer, // bu tokenı yayınlayan kim (authserver)
+                    expires: accessTokenExpiration,
+                    notBefore: DateTime.Now, // dakikadan önce geçersiz olmasın  ????? 
+                    claims: GetClaimsByClient(client),
+                    signingCredentials: signingCredentials
+                );
+
+
+
+            var handler = new JwtSecurityTokenHandler(); // bu arkadaş bir token olşturcak
+
+            var token = handler.WriteToken(jwtSecurityToken); // bana bi token ver ve ben tokun oluşturayım
+            // peki nasıl => yukarıda (  JwtSecurityToken jwtSecurityToken  ile başlayan ) yerdeki bilgilere göre bana token üretip string token üretiyor 
+
+            var tokenDto = new ClientTokenDto
+            {
+                AccessToken = token, // tokenın kendisi
+                AccessTokenExpiration = accessTokenExpiration,
+
+            };
+
+            return tokenDto;
         }
     }
 }
