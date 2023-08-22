@@ -11,8 +11,11 @@ namespace AuthServer.Core.DTOs
 
         public string AccessToken { get; set; } 
         public DateTime AccessTokenExpiration { get; set; } // accesstoken'ın ömrünü belirliyorum
-        public string RefreshToken { get; set; } 
-        public string RefreshTokenExpiration { get; set; } // RefresToken'ın ömrünü belirliyorum
+        public string RefreshToken { get; set; }
+        // Refresh Token
+        // Access token’ın expire süresi sona ermeye yaklaştığında veya
+        // sona erdiğinde yeni bir access token üretebilmek için kullanılan token değeridir
+        public DateTime RefreshTokenExpiration { get; set; } // RefresToken'ın ömrünü belirliyorum
 
     }
 }
