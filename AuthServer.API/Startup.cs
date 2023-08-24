@@ -1,3 +1,4 @@
+using AuthServer.Core.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,6 +31,8 @@ namespace AuthServer.API
             // CustomTokenOptions ve appsettingin haberleþmesini saðlayacaðýz
             services.Configure<CustomTokenOptions>(Configuration.GetSection("TokenOption"));
             // generic olarak CustomTokenOptions al. bu CustomTokenOptions'ý nerden al git appseetings içinden getsetting ile tokenoption al
+            services.Configure<Client>(Configuration.GetSection("Clients"));
+
 
 
             services.AddControllers();
