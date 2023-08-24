@@ -15,7 +15,7 @@ namespace AuthServer.Core.Services
 
         Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto); 
         // kullanıcı bilgilerinin doğruluğuna göre token oluşturucak
-        Task<Response<TokenDto>> CreateTokenByRefreshToken(string refreshToken); // refresh token ile yenidemnbir token oluşturma
+        Task<Response<TokenDto>> CreateTokenByRefreshToken(string refreshToken); // refresh token ile yeniden bir token oluşturma
         Task<Response<NoDataDto>> RevokeRefreshToken(string refreshToken); // refresh token sonlandırabilirim
         // kullanıcı logout yapmak istediğined null'a set ederim
         Task<Response<ClientTokenDto>> CreateTokenByClient(ClientLoginDto clientLoginDto);
