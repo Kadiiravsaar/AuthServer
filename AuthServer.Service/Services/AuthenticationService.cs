@@ -5,6 +5,7 @@ using AuthServer.Core.Repositories;
 using AuthServer.Core.Services;
 using AuthServer.Core.UniwOfWork;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SharedLibrary.Dtos;
 using System;
@@ -23,7 +24,7 @@ namespace AuthServer.Service.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IGenericRepository<UserRefreshToken> _userRefreshToken;
 
-        public AuthenticationService(IOptions<List<Client>> optionsClients, ITokenService tokenService, UserManager<UserApp> userManager, 
+        public AuthenticationService(IOptions<List<Client>> optionsClients, ITokenService tokenService, UserManager<UserApp> userManager,
             IUnitOfWork unitOfWork, IGenericRepository<UserRefreshToken> userRefreshToken)
         {
             _clients = optionsClients.Value; // startup da okuyacak
@@ -33,9 +34,46 @@ namespace AuthServer.Service.Services
             _userRefreshToken = userRefreshToken;
         }
 
-        public Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto)
+        public async Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto)
         {
-            throw new NotImplementedException();
+            if (loginDto == null) throw new ArgumentNullException(nameof(loginDto)); // loginDto null mu kontrol
+
+            var user = await _userManager.FindByEmailAsync(loginDto.Email); // userı bulmaya çalışalım usermanager içindeki metot FindByEmailAsync 
+
+            if (user == null) return Response<TokenDto>.Fail("Password or email Wrong", 400, true); // user yoksa
+
+            if (!await _userManager.CheckPasswordAsync(user, loginDto.Password)) // userın password kontrolu
+            {
+                if (user == null) return Response<TokenDto>.Fail("Password or email Wrong", 400, true);
+
+            }
+            // artık kullanıcı var 
+
+            var token = _tokenService.CreateToken(user); // token oluştur/üret
+
+            var userRefreshToken = await _userRefreshToken.Where(x => x.UserId == user.Id).SingleOrDefaultAsync(); // refresh token kaydedilecek ama acaba var mı 
+
+            if (userRefreshToken == null) // eğer yoksa 
+            {
+                await _userRefreshToken.Add(new UserRefreshToken // userrefreshtoken'a yeni bi userrefreshtoken ekle
+                {
+                    UserId = user.Id,
+                    Code = token.RefreshToken, // token üzerinden gelecek refreshtokenı code eşitle
+                    Expiration = token.RefreshTokenExpiration
+                });
+            }
+            else // eğer varsa 
+            {
+                userRefreshToken.Code = token.RefreshToken; // bilgileri güncelle
+                userRefreshToken.Expiration = token.RefreshTokenExpiration;
+
+            }
+
+            await _unitOfWork.CommitAsync();
+            return Response<TokenDto>.Success(token, 200);
+
+
+
         }
 
         public Task<Response<ClientTokenDto>> CreateTokenByClient(ClientLoginDto clientLoginDto)
