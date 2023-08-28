@@ -31,7 +31,7 @@ namespace AuthServer.API
             // CustomTokenOptions ve appsettingin haberleþmesini saðlayacaðýz
             services.Configure<CustomTokenOptions>(Configuration.GetSection("TokenOption"));
             // generic olarak CustomTokenOptions al. bu CustomTokenOptions'ý nerden al git appseetings içinden getsetting ile tokenoption al
-            services.Configure<Client>(Configuration.GetSection("Clients"));
+            services.Configure<List<Client>>(Configuration.GetSection("Clients"));
 
 
 
