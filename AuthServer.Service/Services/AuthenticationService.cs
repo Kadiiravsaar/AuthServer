@@ -4,9 +4,11 @@ using AuthServer.Core.Models;
 using AuthServer.Core.Repositories;
 using AuthServer.Core.Services;
 using AuthServer.Core.UniwOfWork;
+using AuthServer.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using SharedLibrary.Dtos;
 using System;
 using System.Collections.Generic;
@@ -36,6 +38,7 @@ namespace AuthServer.Service.Services
 
         public async Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto)
         {
+
             if (loginDto == null) throw new ArgumentNullException(nameof(loginDto)); // loginDto null mu kontrol
 
             var user = await _userManager.FindByEmailAsync(loginDto.Email); // userı bulmaya çalışalım usermanager içindeki metot FindByEmailAsync 
@@ -44,10 +47,10 @@ namespace AuthServer.Service.Services
 
             if (!await _userManager.CheckPasswordAsync(user, loginDto.Password)) // userın password kontrolu
             {
-                if (user == null) return Response<TokenDto>.Fail("Password or email Wrong", 400, true);
+                return Response<TokenDto>.Fail("Password or email Wrong", 400, true);
 
             }
-            // artık kullanıcı var 
+            // artık kullanıcı var token üretebiliriz
 
             var token = _tokenService.CreateToken(user); // token oluştur/üret
 
@@ -66,13 +69,10 @@ namespace AuthServer.Service.Services
             {
                 userRefreshToken.Code = token.RefreshToken; // bilgileri güncelle
                 userRefreshToken.Expiration = token.RefreshTokenExpiration;
-
             }
 
             await _unitOfWork.CommitAsync();
             return Response<TokenDto>.Success(token, 200);
-
-
 
         }
 
@@ -90,5 +90,12 @@ namespace AuthServer.Service.Services
         {
             throw new NotImplementedException();
         }
+
+
+       
+
+
+
+
     }
 }
