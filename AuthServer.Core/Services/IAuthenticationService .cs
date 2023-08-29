@@ -13,14 +13,14 @@ namespace AuthServer.Core.Services
         // direk olarak api ile haberleşecek service
         // api ile direk haberleştiğim için direk response dönüyorum
 
-        Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto); 
+        Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto);
         // kullanıcı bilgilerinin doğruluğuna göre token oluşturucak
         Task<Response<TokenDto>> CreateTokenByRefreshToken(string refreshToken); // refresh token ile yeniden bir token oluşturma
         Task<Response<NoDataDto>> RevokeRefreshToken(string refreshToken); // refresh token sonlandırabilirim
         // kullanıcı logout yapmak istediğined null'a set ederim
-        Task<Response<ClientTokenDto>> CreateTokenByClient(ClientLoginDto clientLoginDto);
+        Response<ClientTokenDto> CreateTokenByClient(ClientLoginDto clientLoginDto);
         // üyelik sistemi olmadan client bi token alsın diye
-        
+
 
     }
 }
