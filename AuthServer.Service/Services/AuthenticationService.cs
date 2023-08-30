@@ -81,16 +81,37 @@ namespace AuthServer.Service.Services
             var clients = _clients.SingleOrDefault(x => x.Id == clientLoginDto.ClientId && x.Secret == clientLoginDto.ClientSecret);
             if (clients == null)
             {
-                return Response<ClientTokenDto>.Fail("ClientId or ClientSecret Wrong",404,true);
+                return Response<ClientTokenDto>.Fail("ClientId or ClientSecret Wrong", 404, true);
             }
             var tokenClient = _tokenService.CreateTokenByClient(clients);
 
             return Response<ClientTokenDto>.Success(tokenClient, 200);
         }
 
-        public Task<Response<TokenDto>> CreateTokenByRefreshToken(string refreshToken)
+        public async Task<Response<TokenDto>> CreateTokenByRefreshToken(string refreshToken)
         {
-            throw new NotImplementedException();
+            var existRefresToken = await _userRefreshToken.Where(x => x.Code == refreshToken).SingleOrDefaultAsync();
+            if (existRefresToken == null)
+            {
+                return Response<TokenDto>.Fail("Refresh Token Not found", 404, true);
+
+            }
+
+            var user = await _userManager.FindByEmailAsync(existRefresToken.UserId);
+            if (user == null)
+            {
+                return Response<TokenDto>.Fail("UserId Not found", 404, true);
+
+            }
+
+            var tokenDto = _tokenService.CreateToken(user);
+            existRefresToken.Code = tokenDto.RefreshToken;
+            existRefresToken.Expiration = tokenDto.RefreshTokenExpiration;
+
+            await _unitOfWork.CommitAsync();
+
+            return Response<TokenDto>.Success(tokenDto, 200);
+
         }
 
         public Task<Response<NoDataDto>> RevokeRefreshToken(string refreshToken)
@@ -99,7 +120,7 @@ namespace AuthServer.Service.Services
         }
 
 
-       
+
 
 
 
