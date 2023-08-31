@@ -35,7 +35,12 @@ namespace AuthServer.Service.Services
             _unitOfWork = unitOfWork;
             _userRefreshToken = userRefreshToken;
         }
-
+        /// <summary>
+        /// yeni bir token oluşturmak
+        /// </summary>
+        /// <param name="CreateTokenAsync"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto)
         {
 
@@ -88,24 +93,31 @@ namespace AuthServer.Service.Services
             return Response<ClientTokenDto>.Success(tokenClient, 200);
         }
 
-        public async Task<Response<TokenDto>> CreateTokenByRefreshToken(string refreshToken)
+
+        /// <summary>
+        ///  Refresh Token ile birlikte yeni bir token almak
+        /// </summary>
+        /// <param name="CreateTokenByRefreshToken"></param>
+        /// <returns></returns>
+        public async Task<Response<TokenDto>> CreateTokenByRefreshToken(string refreshToken) 
         {
-            var existRefresToken = await _userRefreshToken.Where(x => x.Code == refreshToken).SingleOrDefaultAsync();
+            var existRefresToken = await _userRefreshToken.Where(x => x.Code == refreshToken).SingleOrDefaultAsync(); // veritabanında refresh token var mı
+
             if (existRefresToken == null)
             {
                 return Response<TokenDto>.Fail("Refresh Token Not found", 404, true);
 
             }
 
-            var user = await _userManager.FindByEmailAsync(existRefresToken.UserId);
+            var user = await _userManager.FindByEmailAsync(existRefresToken.UserId); // refresh token varsa userı bulucaz
             if (user == null)
             {
                 return Response<TokenDto>.Fail("UserId Not found", 404, true);
 
             }
 
-            var tokenDto = _tokenService.CreateToken(user);
-            existRefresToken.Code = tokenDto.RefreshToken;
+            var tokenDto = _tokenService.CreateToken(user); // token üreteceğiz
+            existRefresToken.Code = tokenDto.RefreshToken; // var olan refresh tokenı yeni token ile değişeceğiz
             existRefresToken.Expiration = tokenDto.RefreshTokenExpiration;
 
             await _unitOfWork.CommitAsync();
