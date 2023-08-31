@@ -126,15 +126,20 @@ namespace AuthServer.Service.Services
 
         }
 
+        /// <summary>
+        ///  kullanıcnın db'de refresh tokenı nulla set edeceğiz
+        /// </summary>
+        /// <param name="RevokeRefreshToken"></param>
+        /// <returns></returns>
         public async Task<Response<NoDataDto>> RevokeRefreshToken(string refreshToken)
         {
-            var existRefreshToken = await _userRefreshToken.Where(x => x.Code == refreshToken).SingleOrDefaultAsync();
+            var existRefreshToken = await _userRefreshToken.Where(x => x.Code == refreshToken).SingleOrDefaultAsync(); // refresh tokenı var mı 
             if (existRefreshToken == null)
             {
                 return Response<NoDataDto>.Fail("Refresh Token Not found", 404, true);
 
             }
-            _userRefreshToken.Remove(existRefreshToken);
+            _userRefreshToken.Remove(existRefreshToken); // var olan refresh tokenı nulla set edeğiz
 
             await _unitOfWork.CommitAsync();
 
