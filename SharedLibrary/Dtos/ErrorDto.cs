@@ -11,7 +11,7 @@ namespace SharedLibrary.Dtos
     {
         // Benim uygulamamda herhangi bir hata meydana geldiğined bu sınıfı dolduracağım
 
-        public List<string> Errors { get; private set; } // hataların listesi
+        public List<string> Errors { get; private set; } = new List<string>(); // hataların listesi
         public bool IsShow { get; private set; } // hataların kullanıcıya gösterilip gösterilmeyeceği
 
         // Gelen hatanın showunu true gönderirsem sen bu hatayı kullanıcıya gösterebilirsin. 
@@ -19,10 +19,7 @@ namespace SharedLibrary.Dtos
 
         // *** private sete çektik çünkü başka biri propu set etmek isterse ctoru mutlaka kullansın
 
-        public ErrorDto()
-        {
-            Errors = new List<string>(); // nesne örneği aldık ki kolayca doldurabilelim
-        }
+       
         public ErrorDto(string error, bool isShow) // bir tane hata meydana gelirse diye yaptık
         {
             Errors.Add(error); // hata dizinine tek gelen hatayı ekledik

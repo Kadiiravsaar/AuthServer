@@ -39,6 +39,8 @@ namespace SharedLibrary.Dtos
             };
         }
 
+       
+
         public static Response<T> Fail(ErrorDto errorDto, int statusCode) // parametre de errorDto verdiğimiz için isShow vermedik
         {
             return new Response<T>
@@ -48,6 +50,7 @@ namespace SharedLibrary.Dtos
                 IsSuccessful = false
             };
         }
+
 
 
         public static Response<T> Fail(string errorMessage, int statusCode, bool isShow) // tek bir hata dönmek için
