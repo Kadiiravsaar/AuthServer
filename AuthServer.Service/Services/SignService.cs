@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AuthServer.Service.Services
 {
-    internal static class SignService // key'imizi imzalama işlemi yapacağız geriye symetrik key döneceğiz
+    public static class SignService // key'imizi imzalama işlemi yapacağız geriye symetrik key döneceğiz
     {
         public static SecurityKey GetSymmetricSecurityKey(string securityKey)
         {
