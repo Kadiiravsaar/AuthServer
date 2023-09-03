@@ -22,25 +22,19 @@ namespace AuthServer.Service.Services
 
         public async Task<Response<UserAppDto>> CreateUserAsync(CreateUserDto createUserDto)
         {
-            var user = new UserApp { Email = createUserDto.Email,UserName = createUserDto.UserName };           
-        
-            var result = await _userManager.CreateAsync(user,createUserDto.Password);
-
-            if (!result.Succeeded)
+            var user = new UserApp { Email = createUserDto.Email, UserName = createUserDto.UserName }; // bir tane user oluşturduk new ile 
+            var result = await _userManager.CreateAsync(user,createUserDto.Password); // usermanager içindeki passwordu hasslemek için burda aldık
+            if (!result.Succeeded) //  resultun yani başarılı değilse
             {
-                var errors = result.Errors.Select(x => x.Description).ToList();
-
-                return Response<UserAppDto>.Fail(new ErrorDto(errors, true), 400);
-
+                var errors = result.Errors.Select(x => x.Description).ToList(); // IdentityErrordan gelen description döndük
+                return Response<UserAppDto>.Fail(new ErrorDto(errors,true),400);
             }
             return Response<UserAppDto>.Success(ObjectMapper.Mapper.Map<UserAppDto>(user), 200);
-
-
         }
 
         public async Task<Response<UserAppDto>> GetUserByNameAsync(string userName)
         {
-            var user = await _userManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByNameAsync(userName); // user var mı 
 
             if (user == null)
             {
