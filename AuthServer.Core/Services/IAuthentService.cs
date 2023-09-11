@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace AuthServer.Core.Services
 {
-    public interface IAuthenticationService // kimlik doğrulama işlemi burda gerçekleşecek
+    public interface IAuthentService // kimlik doğrulama işlemi burda gerçekleşecek
     {
-        // direk olarak api ile haberleşecek service
-        // api ile direk haberleştiğim için direk response dönüyorum
 
         Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto);
         // kullanıcı bilgilerinin doğruluğuna göre token oluşturucak
@@ -20,7 +18,6 @@ namespace AuthServer.Core.Services
         // kullanıcı logout yapmak istediğined null'a set ederim
         Response<ClientTokenDto> CreateTokenByClient(ClientLoginDto clientLoginDto);
         // üyelik sistemi olmadan client bi token alsın diye
-
 
     }
 }

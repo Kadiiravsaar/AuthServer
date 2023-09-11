@@ -5,6 +5,8 @@ using AuthServer.Core.Repositories;
 using AuthServer.Core.Services;
 using AuthServer.Core.UniwOfWork;
 using AuthServer.Data;
+using AuthServer.Service.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -16,9 +18,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+ 
 namespace AuthServer.Service.Services
 {
-    public class AuthenticationService : IAuthenticationService
+    public class AuthentService : IAuthentService
     {
         private readonly List<Client> _clients; // cilentleri alacağım
         private readonly ITokenService _tokenService; // token oluşturmak için
@@ -26,7 +29,7 @@ namespace AuthServer.Service.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IGenericRepository<UserRefreshToken> _userRefreshToken;
 
-        public AuthenticationService(IOptions<List<Client>> optionsClients, ITokenService tokenService, UserManager<UserApp> userManager,
+        public AuthentService(IOptions<List<Client>> optionsClients, ITokenService tokenService, UserManager<UserApp> userManager,
             IUnitOfWork unitOfWork, IGenericRepository<UserRefreshToken> userRefreshToken)
         {
             _clients = optionsClients.Value; // startup da okuyacak
@@ -35,6 +38,11 @@ namespace AuthServer.Service.Services
             _unitOfWork = unitOfWork;
             _userRefreshToken = userRefreshToken;
         }
+
+
+
+
+
         /// <summary>
         /// yeni bir token oluşturmak
         /// </summary>
@@ -99,7 +107,7 @@ namespace AuthServer.Service.Services
         /// </summary>
         /// <param name="CreateTokenByRefreshToken"></param>
         /// <returns></returns>
-        public async Task<Response<TokenDto>> CreateTokenByRefreshToken(string refreshToken) 
+        public async Task<Response<TokenDto>> CreateTokenByRefreshToken(string refreshToken)
         {
             var existRefresToken = await _userRefreshToken.Where(x => x.Code == refreshToken).SingleOrDefaultAsync(); // veritabanında refresh token var mı
 

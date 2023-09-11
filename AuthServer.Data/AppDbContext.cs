@@ -20,16 +20,19 @@ namespace AuthServer.Data
         {
 
         }
-        //"Server=DESKTOP-G34LNC7;Database=CoreDemo;Trusted_Connection=true;TrustServerCertificate=True;"
-        public DbSet<Product> Products { get; set; }
-        public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder) // gennel ayarlar mesela entityde required
+        public DbSet<Product> Products { get; set; }
+        public DbSet<UserRefreshToken> Userrefreshtokens { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+            base.OnModelCreating(builder);
 
-            base.OnModelCreating(builder);  
         }
+      
+
 
     }
 }
