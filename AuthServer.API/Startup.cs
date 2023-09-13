@@ -49,7 +49,7 @@ namespace AuthServer.API
 
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("SqlCon"),sqloptions =>
+                options.UseSqlServer(Configuration.GetConnectionString("SqlCon"), sqloptions =>
                 {
                     sqloptions.MigrationsAssembly("AuthServer.Data");// migration burda olacaðý için burda oluþsun
                 });
@@ -74,7 +74,7 @@ namespace AuthServer.API
             // bi token geldiðinde onu doðrulamak ile ilgili
             services.AddAuthentication(options => // kimlik dýðrulama yapacaðýz
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; 
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 // 2 farklý üyelik ssitemi için schema belirtiyoruz. ancak bende bir tane olduðu için sabit kullandým
 
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -83,17 +83,17 @@ namespace AuthServer.API
 
 
             }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts => // cokkie mi jwt mi onun için ayar yapacaðýz
-            { 
+            {
                 // requestin headýrýnda jwt arayacak 
 
                 var tokenOptions = Configuration.GetSection("TokenOption").Get<CustomTokenOptions>();
 
-                opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters() 
+                opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
                 // validation parametrelerini belirliyoruz
                 {
                     ValidIssuer = tokenOptions.Issuer, // tokený kim daðýttý
                     ValidAudience = tokenOptions.Audience[0], // hangi apiye istek yapacaksa dizi içerisindeki ilk eleman
-                    IssuerSigningKey = SignService.GetSymmetricSecurityKey(tokenOptions.SecurityKey), 
+                    IssuerSigningKey = SignService.GetSymmetricSecurityKey(tokenOptions.SecurityKey),
 
                     ValidateIssuerSigningKey = true, // mutlaka imza olup doðrulanacak
                     ValidateAudience = true, // audience doðrula
@@ -126,6 +126,8 @@ namespace AuthServer.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
