@@ -117,7 +117,9 @@ namespace AuthServer.Service.Services
 
             }
 
-            var user = await _userManager.FindByEmailAsync(existRefresToken.UserId); // refresh token varsa userı bulucaz
+            var user = await _userManager.FindByIdAsync(existRefresToken.UserId); // refresh token varsa userı bulucaz
+
+
             if (user == null)
             {
                 return Response<TokenDto>.Fail("UserId Not found", 404, true);
